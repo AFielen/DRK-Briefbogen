@@ -178,7 +178,7 @@ export default function OnboardingPage() {
               <div className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
                 {slug && (
                   <span>
-                    briefbogen.drk-aachen.de/<strong style={{ color: 'var(--text)' }}>{slug}</strong>
+                    drk-briefbogen.de/<strong style={{ color: 'var(--text)' }}>{slug}</strong>
                   </span>
                 )}
                 {slugChecking && <span className="ml-2">Prüfe...</span>}

@@ -8,7 +8,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       MAILJET_API_KEY: ${MAILJET_API_KEY}
       MAILJET_SECRET_KEY: ${MAILJET_SECRET_KEY}
-      MAILJET_FROM_EMAIL: briefbogen@drk-aachen.de
+      MAILJET_FROM_EMAIL: noreply@drk-briefbogen.de
       MAILJET_FROM_NAME: DRK Briefbogen-Generator
       NEXT_PUBLIC_BASE_URL: ${BASE_URL}
       MAGIC_LINK_EXPIRY_MINUTES: 15
