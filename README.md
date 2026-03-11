@@ -1,6 +1,6 @@
-# 🏥 DRK App Template
+# 📝 DRK Briefbogen-Generator
 
-**Starter-Template für alle DRK-Digitalisierungstools.**
+**Digitaler Briefbogen-Generator für Kreisverbände, Ortsvereine und ihre Gesellschaften im Deutschen Roten Kreuz.**
 
 Open Source · Kostenlos · DSGVO-konform
 
@@ -8,74 +8,155 @@ Open Source · Kostenlos · DSGVO-konform
 
 ## Was ist das?
 
-Dieses Repository ist der Ausgangspunkt für neue Web-Apps im DRK-Kontext. Es enthält das einheitliche Design-System, die Projektstruktur und alle Konventionen – damit jede neue App vom ersten Moment an wie eine DRK-App aussieht und funktioniert.
+DRK-Organisationen brauchen einheitliche Briefbögen – mit korrektem Briefkopf, Kontaktdaten, Bankverbindung und Vereinsregister-Angaben. Bisher werden Word-Vorlagen manuell gepflegt, was bei Änderungen (neuer Vorstand, neue Adresse) zu Inkonsistenzen führt.
+
+Der **DRK Briefbogen-Generator** löst das: Organisationsdaten werden zentral gepflegt, und jeder Mitarbeiter kann in einem 4-Schritte-Wizard professionelle Briefe als `.docx` erzeugen – direkt im Browser, ohne Installation.
 
 ## ✨ Features
 
-* **DRK-Header + Footer** — Rote Leiste mit Logo, Hilfe- und Spenden-Icons
-* **Box-basiertes Layout** — Konsistente Karten-Optik auf grauem Hintergrund
-* **Zweisprachig (DE/EN)** — i18n-System von Tag 1
-* **Pflichtseiten** — Impressum, Datenschutz, Hilfe, Spenden fertig eingebaut
-* **CLAUDE.md** — Claude Code kennt sofort alle Konventionen
-* **Flexibles Deployment** — Statisch (GitHub Pages) oder Server (Docker)
-* **DSGVO-konform** — Keine Cookies, keine externen Dienste, keine Tracker
+### Web-App
+- **Multi-Tenant SaaS** — Jede Organisation (Kreisverband, Ortsverein) hat einen eigenen Bereich mit eigener URL
+- **4-Schritte Briefbogen-Wizard** — Setup → Empfänger → Brief → Vorschau & Download
+- **DOCX-Export** — Client-seitige Word-Generierung mit eingebettetem Briefkopf (kein Server-Upload)
+- **Passwordless Login** — E-Mail-basiert mit 6-stelligem Code oder Magic Link (kein Passwort nötig)
+- **Admin-Panel** — Gesellschaften/Abteilungen verwalten, Mitglieder einladen, Rollen vergeben
+- **Organisationsverwaltung** — Unbegrenzt viele Gesellschaften pro Organisation, jeweils mit eigenem Briefkopf
+- **Entwürfe speichern** — Brief-Entwürfe und Mitarbeiterdaten im Browser gespeichert (localStorage)
+- **Onboarding** — Neue Organisation erstellen oder bestehender per Slug beitreten
+- **Zweisprachig** — Deutsch und Englisch (DE/EN)
+- **Mobile-optimiert** — Responsive Design, Touch-Ziele mindestens 44px
 
-## 🚀 Schnellstart
+### REST-API
+- **Auth** — Magic Link + Code-Verifikation, JWT-Sessions
+- **Tenants** — Organisationen erstellen, abfragen, beitreten
+- **Units** — Gesellschaften/Abteilungen CRUD (Admin)
+- **Members** — Mitglieder auflisten, einladen, Rollen verwalten (Admin)
 
-### Neues Projekt erstellen
+## 🚀 Installation
 
-1. Auf GitHub: **"Use this template"** → "Create a new repository"
-2. Repository-Name wählen (z.B. `drk-rundlauf`, `drk-protokoll`)
-3. Klonen und loslegen:
+### Docker (empfohlen)
 
 ```bash
-git clone https://github.com/AFielen/[neuer-name].git
-cd [neuer-name]
+git clone https://github.com/AFielen/DRK-Briefbogen.git
+cd DRK-Briefbogen
+
+# Umgebungsvariablen konfigurieren
+cp .env.example .env
+# .env bearbeiten: POSTGRES_PASSWORD, JWT_SECRET, MAILJET_API_KEY, MAILJET_SECRET_KEY setzen
+
+docker compose up -d --build
+```
+
+Startet drei Services:
+- **App** (Next.js): Port 3000 (intern)
+- **Datenbank** (PostgreSQL 16): Port 5432 (intern)
+- **Reverse Proxy** (Caddy): Port 80/443 mit automatischem HTTPS
+
+### Lokal entwickeln
+
+```bash
+git clone https://github.com/AFielen/DRK-Briefbogen.git
+cd DRK-Briefbogen
 npm install
+
+# PostgreSQL starten + DATABASE_URL konfigurieren
 npm run dev
 ```
 
-### Mit Claude Code entwickeln
+## ⚙️ Umgebungsvariablen
 
-```bash
-# Im Projektverzeichnis – Claude liest CLAUDE.md automatisch:
-claude
-```
-
-### Anpassen
-
-1. **Suche & Ersetze** `APP_TITEL` → tatsächlicher App-Name
-2. **Suche & Ersetze** `APP_BESCHREIBUNG` → Beschreibung
-3. **Logo-Dateien** in `public/` ergänzen (logo.svg, logo.png, favicon.svg)
-4. **`lib/i18n.ts`** mit app-spezifischen Übersetzungen erweitern
-5. **`next.config.ts`** → `'export'` (statisch) oder `'standalone'` (Server)
-6. **README.md** nach dem Pflicht-Format anpassen (siehe CLAUDE.md)
+| Variable | Beschreibung | Pflicht |
+|---|---|---|
+| `POSTGRES_PASSWORD` | PostgreSQL-Passwort | Ja |
+| `JWT_SECRET` | Mindestens 64 Zeichen, zufällig | Ja |
+| `MAILJET_API_KEY` | Mailjet API Key | Ja |
+| `MAILJET_SECRET_KEY` | Mailjet Secret Key | Ja |
+| `BASE_URL` | Öffentliche URL (z.B. `https://drk-briefbogen.de`) | Ja |
 
 ## 🛠️ Tech-Stack
 
-* [Next.js 16](https://nextjs.org/) + [React 19](https://react.dev/)
-* [TypeScript](https://www.typescriptlang.org/)
-* [Tailwind CSS 4](https://tailwindcss.com/)
+- [Next.js 16](https://nextjs.org/) + [React 19](https://react.dev/) (App Router, standalone)
+- [TypeScript](https://www.typescriptlang.org/) (strict)
+- [Tailwind CSS 4](https://tailwindcss.com/)
+- [PostgreSQL 16](https://www.postgresql.org/) (Self-Hosted)
+- [Mailjet](https://www.mailjet.com/) (E-Mail, EU/Frankreich)
+- [Caddy 2](https://caddyserver.com/) (Reverse Proxy, Auto-HTTPS)
+- Docker + Docker Compose (Deployment)
 
-## 📐 Enthalten
+## 📐 Projektstruktur
 
-| Datei | Zweck |
+```
+DRK-Briefbogen/
+├── app/
+│   ├── layout.tsx               # Root-Layout: DRK-Header + Footer
+│   ├── page.tsx                 # Login-Seite
+│   ├── globals.css              # DRK CSS-Variablen + Utility-Klassen
+│   ├── not-found.tsx            # Custom 404
+│   ├── dashboard/page.tsx       # Organisationsauswahl nach Login
+│   ├── onboarding/page.tsx      # Organisation erstellen/beitreten
+│   ├── [slug]/
+│   │   ├── page.tsx             # Briefbogen-Wizard (4 Schritte)
+│   │   └── admin/page.tsx       # Gesellschaften + Mitglieder verwalten
+│   ├── auth/
+│   │   ├── magic/page.tsx       # Magic-Link-Verifikation
+│   │   └── verify/page.tsx      # Code-Verifikation
+│   ├── api/
+│   │   ├── auth/                # send, verify, magic, me, logout
+│   │   └── tenants/             # CRUD, units, members, join
+│   ├── impressum/page.tsx
+│   ├── datenschutz/page.tsx
+│   ├── hilfe/page.tsx
+│   └── spenden/page.tsx
+├── lib/
+│   ├── types.ts                 # TypeScript-Typen
+│   ├── db.ts                    # PostgreSQL-Pool
+│   ├── auth.ts                  # JWT + Code-Generierung
+│   ├── email.ts                 # Mailjet (Nodemailer)
+│   ├── storage.ts               # localStorage-Helpers
+│   ├── docx-export.ts           # Client-seitige DOCX-Generierung
+│   ├── i18n.ts                  # Übersetzungen (DE/EN)
+│   └── version.ts               # Versionierung
+├── db/
+│   └── init.sql                 # Datenbankschema
+├── public/
+│   ├── logo.png / logo.svg      # DRK-Logo
+│   └── favicon.svg
+├── Dockerfile                   # Multi-Stage Build (Node 22 Alpine)
+├── docker-compose.yml           # App + PostgreSQL + Caddy
+└── Caddyfile                    # Reverse-Proxy-Konfiguration
+```
+
+## 🗄️ Datenbank
+
+| Tabelle | Zweck |
 |---|---|
-| `CLAUDE.md` | Konventionen für Claude Code |
-| `app/layout.tsx` | DRK-Header (❓ Hilfe + ❤️ Spenden) + Footer |
-| `app/globals.css` | DRK-Farben, Box-Klassen, Button-Styles |
-| `app/page.tsx` | Beispiel-Startseite |
-| `app/impressum/` | Impressum |
-| `app/datenschutz/` | Datenschutzerklärung |
-| `app/hilfe/` | Hilfe & FAQ |
-| `app/spenden/` | Spenden-/Unterstützungsseite |
-| `app/not-found.tsx` | Custom 404 |
-| `lib/i18n.ts` | Zweisprachigkeit DE/EN |
+| `tenants` | Organisationen (Slug, Name, Parent-ID für Hierarchien) |
+| `tenant_units` | Gesellschaften/Abteilungen mit Briefkopf-Konfiguration (JSONB) |
+| `users` | Benutzer (nur E-Mail-Adresse) |
+| `tenant_members` | Zuordnung Benutzer ↔ Organisation mit Rolle (admin/member) |
+| `auth_tokens` | Login-Codes und Magic-Link-Tokens (gehashed, 15 Min. gültig) |
 
-## 🔗 Referenz-Apps
+## 🔒 Datenschutz & Sicherheit
 
-* [abstimmung](https://github.com/AFielen/abstimmung) — Digitales Abstimmungssystem
-* [auskunft](https://github.com/AFielen/auskunft) — Digitale Compliance-Selbstauskunft
+- **Hosting:** Hetzner Cloud (Deutschland) — kein US-Dienst
+- **E-Mail:** Mailjet (EU, Frankreich) — DSGVO-konform
+- **Session-Cookie:** httpOnly, SameSite=Lax (30 Tage)
+- **Auth-Tokens:** Einmalig verwendbar, zeitlich begrenzt (15 Min.)
+- **Minimale Daten** — Nur E-Mail-Adresse für Authentifizierung
+- **Briefinhalte nur im Browser** — Persönliche MA-Daten und Briefentwürfe ausschließlich in localStorage
+- **DOCX-Generierung client-seitig** — Kein Upload von Dokumenten an den Server
+- **Keine externen Dienste** — Keine Google Fonts, kein CDN, kein Tracking, keine Analytics
+- **Open Source** — Gesamter Quellcode einsehbar und überprüfbar
+
+## 🤝 Beitragen
+
+Pull Requests sind willkommen!
+
+1. Fork erstellen
+2. Feature-Branch anlegen (`git checkout -b feature/mein-feature`)
+3. Committen (`git commit -m 'feat: Beschreibung'`)
+4. Pushen (`git push origin feature/mein-feature`)
+5. Pull Request öffnen
 
 ## 📄 Lizenz
 
@@ -83,7 +164,7 @@ MIT — Frei verwendbar für alle DRK-Gliederungen und darüber hinaus.
 
 ## 🏥 Über
 
-Ein Projekt des [DRK Kreisverband StädteRegion Aachen e.V.](https://www.drk-aachen.de/)
+Ein Projekt des [DRK Kreisverband StädteRegion Aachen e.V.](https://www.drk-aachen.de/) zur Digitalisierung der Verwaltungsprozesse im Deutschen Roten Kreuz.
 
 ---
 

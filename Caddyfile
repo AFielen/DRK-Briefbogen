@@ -1,0 +1,3 @@
+drk-briefbogen.de {
+    reverse_proxy app:3000
+}

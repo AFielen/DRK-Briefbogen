@@ -49,16 +49,14 @@ const shared = {
 // ── App-spezifische Übersetzungen (hier pro App erweitern) ──
 const appTranslations = {
   de: {
-    'app.title': 'APP_TITEL',
-    'app.subtitle': 'APP_UNTERTITEL',
-    'app.description': 'APP_BESCHREIBUNG',
-    // Hier app-spezifische Keys ergänzen
+    'app.title': 'Briefbogen-Generator',
+    'app.subtitle': 'Professionelle Briefbögen für DRK-Organisationen',
+    'app.description': 'Erstellen Sie professionelle Briefbögen für DRK-Kreisverbände und Ortsvereine'
   },
   en: {
-    'app.title': 'APP_TITLE_EN',
-    'app.subtitle': 'APP_SUBTITLE_EN',
-    'app.description': 'APP_DESCRIPTION_EN',
-    // Add app-specific keys here
+    'app.title': 'Letterhead Generator',
+    'app.subtitle': 'Professional letterheads for Red Cross organizations',
+    'app.description': 'Create professional letterheads for DRK district and local associations'
   },
 } as const;
 

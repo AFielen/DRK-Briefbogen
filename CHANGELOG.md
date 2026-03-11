@@ -9,19 +9,28 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Added
-- Print-Styles: Header, Footer und Buttons werden beim Drucken ausgeblendet, Cards brechen nicht um
-- Bottom-Sheet-Animationen (`.drk-sheet-enter`, `.drk-backdrop-enter`) als Template-Pattern
-- Accessibility: `focus-visible`-Outline für `<details>`/`<summary>` Elemente
-- `favicon.svg` (Rotes Kreuz auf rotem Hintergrund) in `public/`
-- `CHANGELOG.md` erstellt
+- Mandantenfähiges SaaS: Multi-Tenant-Architektur für DRK-Kreisverbände und Ortsvereine
+- Magic-Link / 6-stelliger Code Authentifizierung (kein Passwort)
+- PostgreSQL-Datenbankschema: tenants, tenant_units, users, tenant_members, auth_tokens
+- API-Routen: Auth (send, verify, magic, me, logout), Tenants CRUD, Units CRUD, Members
+- E-Mail-Versand via Mailjet (EU/Frankreich)
+- Dashboard: Organisation auswählen oder neue anlegen
+- Onboarding: Neue Organisation erstellen oder bestehender beitreten
+- 4-Schritte Briefbogen-Wizard: Setup, Empfänger, Brief, Vorschau
+- Admin-Bereich: Gesellschaften (Units) und Mitglieder verwalten
+- DOCX-Export: Client-seitige .docx-Generierung mit eingebettetem Word-Template
+- localStorage: MA-Daten und Brief-Entwürfe (persönlich, nicht auf Server)
+- Middleware: Authentifizierungs-Check für geschützte Routen
+- Docker Compose: App + PostgreSQL + Caddy Reverse Proxy
+- Dockerfile: Multi-Stage Build (standalone)
+- Caddyfile: Automatisches HTTPS via Let's Encrypt
 
 ### Changed
-- Alle Pflichtseiten (Impressum, Datenschutz, Hilfe, Spenden, 404) nutzen jetzt konsequent CSS-Variablen statt Tailwind-Hardcoded-Farben (`bg-gray-50`, `text-gray-900` etc.)
-- Impressum vervollständigt: Telefonnummer, Vorstandsname, Umsatzsteuer-ID, Registernummer, Haftungsausschluss
-- Datenschutzerklärung erweitert auf 9 nummerierte Abschnitte (Hosting-Platzhalter, Änderungshinweis etc.)
-- Hilfe-Seite: Kontakt-E-Mail auf `digitalisierung@drk-aachen.de` aktualisiert, erweiterte Kontaktbox
-- Header-Subtitle responsive: Langversion ab `sm:`, Kurzversion auf Mobile
-- `tsconfig.json`: `jsx` auf `react-jsx` aktualisiert, `.next/dev/types/**/*.ts` in `include` ergänzt
+- next.config.ts: output von 'export' auf 'standalone' umgestellt
+- app/page.tsx: Von Template-Platzhalter zu Login-Seite
+- Datenschutz: Erweitert um Session-Cookie, E-Mail-Speicherung, Mailjet, Hetzner-Hosting
+- Hilfe-Seite: FAQ für Briefbogen-Generator aktualisiert
+- Layout: App-Titel und Untertitel für Briefbogen-Generator angepasst
 
 ---
 
