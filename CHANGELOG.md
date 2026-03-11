@@ -9,6 +9,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- README: Badges (MIT, Docker, Next.js, DSGVO)
+- README: „Erster Start"-Anleitung mit Onboarding-Ablauf und Slug-Erklärung
+- README: Vollständige lokale Entwicklungsanleitung (PostgreSQL via Docker, init.sql, .env.local)
+- README: Fehlende Umgebungsvariablen MAILJET_FROM_EMAIL und MAILJET_FROM_NAME dokumentiert
+- README: Hetzner-Hosting-Empfehlung (CX21)
+- README: Links zu PROJECT.md und CHANGELOG.md
+- .env.example: MAILJET_FROM_EMAIL ergänzt
 - Mandantenfähiges SaaS: Multi-Tenant-Architektur für DRK-Kreisverbände und Ortsvereine
 - Magic-Link / 6-stelliger Code Authentifizierung (kein Passwort)
 - PostgreSQL-Datenbankschema: tenants, tenant_units, users, tenant_members, auth_tokens

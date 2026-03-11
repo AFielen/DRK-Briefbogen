@@ -4,6 +4,11 @@
 
 Open Source · Kostenlos · DSGVO-konform
 
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Docker](https://img.shields.io/badge/Docker-ready-blue)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![DSGVO](https://img.shields.io/badge/DSGVO-konform-red)
+
 ---
 
 ## Was ist das?
@@ -52,6 +57,21 @@ Startet drei Services:
 - **Datenbank** (PostgreSQL 16): Port 5432 (intern)
 - **Reverse Proxy** (Caddy): Port 80/443 mit automatischem HTTPS
 
+### Erster Start
+
+Nach `docker compose up -d`:
+
+1. `https://ihre-domain.de` im Browser öffnen
+2. Beliebige E-Mail-Adresse eingeben → 6-stelliger Code kommt per E-Mail
+3. Code eingeben → automatisch ins **Onboarding** weitergeleitet
+4. Organisationsname + Slug eingeben, z.B. `drk-aachen`
+5. Der erste Nutzer wird automatisch **Admin** seiner Organisation
+6. Im Admin-Bereich Gesellschaften anlegen und Mitarbeiter einladen
+
+> **Was ist ein Slug?** Jede Organisation bekommt eine eigene URL, z.B.
+> `drk-briefbogen.de/drk-aachen`. Der Slug wird beim Onboarding einmalig
+> festgelegt und kann danach nicht mehr geändert werden.
+
 ### Lokal entwickeln
 
 ```bash
@@ -59,7 +79,20 @@ git clone https://github.com/AFielen/DRK-Briefbogen.git
 cd DRK-Briefbogen
 npm install
 
-# PostgreSQL starten + DATABASE_URL konfigurieren
+# PostgreSQL starten (z.B. via Docker)
+docker run -d --name drk-db \
+  -e POSTGRES_DB=briefbogen -e POSTGRES_USER=drk \
+  -e POSTGRES_PASSWORD=dev \
+  -p 5432:5432 postgres:16-alpine
+
+# Warten bis PostgreSQL bereit ist, dann Schema einrichten
+sleep 3
+psql postgres://drk:dev@localhost:5432/briefbogen < db/init.sql
+
+# Umgebungsvariablen konfigurieren
+cp .env.example .env.local
+# .env.local bearbeiten: DATABASE_URL=postgres://drk:dev@localhost:5432/briefbogen setzen
+
 npm run dev
 ```
 
@@ -72,6 +105,8 @@ npm run dev
 | `MAILJET_API_KEY` | Mailjet API Key | Ja |
 | `MAILJET_SECRET_KEY` | Mailjet Secret Key | Ja |
 | `BASE_URL` | Öffentliche URL (z.B. `https://drk-briefbogen.de`) | Ja |
+| `MAILJET_FROM_EMAIL` | Absender-Adresse (z.B. `noreply@drk-briefbogen.de`) | Ja |
+| `MAILJET_FROM_NAME` | Absender-Name (z.B. `DRK Briefbogen-Generator`) | Nein |
 
 ## 🛠️ Tech-Stack
 
@@ -82,6 +117,9 @@ npm run dev
 - [Mailjet](https://www.mailjet.com/) (E-Mail, EU/Frankreich)
 - [Caddy 2](https://caddyserver.com/) (Reverse Proxy, Auto-HTTPS)
 - Docker + Docker Compose (Deployment)
+
+> **Empfohlene Instanz:** Hetzner CX21 (2 vCPU, 4 GB RAM) — ausreichend
+> für ~500 gleichzeitige Nutzer, ca. 6 €/Monat.
 
 ## 📐 Projektstruktur
 
@@ -165,6 +203,10 @@ MIT — Frei verwendbar für alle DRK-Gliederungen und darüber hinaus.
 ## 🏥 Über
 
 Ein Projekt des [DRK Kreisverband StädteRegion Aachen e.V.](https://www.drk-aachen.de/) zur Digitalisierung der Verwaltungsprozesse im Deutschen Roten Kreuz.
+
+---
+
+Weitere Details: [PROJECT.md](PROJECT.md) · [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
