@@ -42,7 +42,7 @@ Der **DRK Briefbogen-Generator** löst das: Organisationsdaten werden zentral ge
 ### Docker (empfohlen)
 
 ```bash
-git clone https://github.com/AFielen/DRK-Briefbogen.git
+git clone https://github.com/DRKAachen/DRK-Briefbogen.git
 cd DRK-Briefbogen
 
 # Umgebungsvariablen konfigurieren
@@ -75,7 +75,7 @@ Nach `docker compose up -d`:
 ### Lokal entwickeln
 
 ```bash
-git clone https://github.com/AFielen/DRK-Briefbogen.git
+git clone https://github.com/DRKAachen/DRK-Briefbogen.git
 cd DRK-Briefbogen
 npm install
 
